@@ -283,16 +283,12 @@ Donde:
   - **Actualización con el error medido**
 
 
-# ADRC - Control Activo de Perturbaciones
-
----
-
-## 1. Estimación de Perturbaciones
+### Estimación de Perturbaciones
 
 - Se añade un estado adicional \( d \) para estimar las perturbaciones.
 - La matriz del sistema se extiende para incluir \( d \).
 
-### Sistema Discreto con Perturbación
+#### Sistema Discreto con Perturbación
 
 $$
 \begin{cases}
@@ -301,7 +297,7 @@ y_k = C \cdot x_k
 \end{cases}
 $$
 
-### Si la perturbación es constante:
+#### Si la perturbación es constante:
 
 $$
 d(k+1) = d(k)
@@ -336,7 +332,7 @@ $$
 
 ---
 
-## 2. Ubicación de Polos
+### Ubicación de Polos
 
 Los coeficientes \( \lambda \) (lambdas) se aplican a los estados con error. Esto genera un **polinomio característico** que debe cumplir:
 
@@ -347,7 +343,7 @@ Los coeficientes \( \lambda \) (lambdas) se aplican a los estados con error. Est
 
 ---
 
-## 3. Representación en Espacio de Estados
+### Representación en Espacio de Estados
 
 $$
 y^{(n)}(t) = u(t) + \xi(t)
@@ -396,15 +392,15 @@ $$
 
 ---
 
-## 4. Observador de Luenberger para ADRC
+### Observador de Luenberger para ADRC
 
-### Estimación del Error
+#### Estimación del Error
 
 $$
 \tilde{e}_y = y - \hat{y}
 $$
 
-### Ecuación del Observador
+#### Ecuación del Observador
 
 $$
 \dot{\hat{x}}_\xi = 
@@ -413,7 +409,7 @@ B_\xi \cdot u +
 \lambda_\xi \cdot \tilde{e}_y(t)
 $$
 
-### Matrices del Observador
+#### Matrices del Observador
 
 $$
 A_\xi = 
@@ -446,7 +442,7 @@ $$
 
 ---
 
-## 5. Dinámica del Error de Estimación
+###  Dinámica del Error de Estimación
 
 Al restar las ecuaciones, se define el polinomio característico de la dinámica del error:
 
@@ -454,7 +450,7 @@ $$
 \tilde{e}_y^{(n+m)} + \lambda_{n+m-1}\tilde{e}_y^{(n+m-1)} + \cdots + \lambda_1\dot{\tilde{e}}_y + \lambda_0\tilde{e}_y = \xi^{(m)}(t)
 $$
 
-### Polinomio Característico
+#### Polinomio Característico
 
 $$
 p(s) = s^{n+m} + \lambda_{n+m-1}s^{n+m-1} + \cdots + \lambda_1 s + \lambda_0
@@ -464,7 +460,7 @@ $$
 
 ---
 
-## 6. Estimación de la Perturbación Generalizada
+### Estimación de la Perturbación Generalizada
 
 Se asume que la perturbación puede modelarse como un polinomio en el tiempo:
 
