@@ -190,10 +190,6 @@ Esto **reduce la complejidad** del sistema.
    - Herramientas de estimación de estados en MATLAB.
    - Aproximación del tiempo muerto para simplificar a un sistema de **segundo orden** (mínimo dos estados).
 
-### Estimación de perturbaciones
-
-- Se añade un estado adicional \( d \) para estimar las perturbaciones.
-- La matriz se extiende para incluir \( d \).
 
 $$
 u_0 = k_1 \, \text{fal}(r_1 - z_1, \alpha_1, \delta) + k_2 \, \text{fal}(r_1 - z_2, \alpha_2, \delta)
@@ -207,9 +203,7 @@ $$
 \end{cases}
 $$
 
----
-
-### Observador de estados extendido lineal
+**Observador de estados extendido lineal**
 
 $$
 \begin{cases}
@@ -233,7 +227,6 @@ $$
 u_0 = k_1 (\tilde{r} - z_1) - k_2 z_2
 $$
 
----
 
 **Donde** $\xi(t)$ **se define como la perturbación generalizada, de tipo aditivo:**
 
@@ -241,10 +234,48 @@ $$
 y^{(n)} = \kappa(x) \, u(t) + \xi(t)
 $$
 
+![Figura de prueba](IMAGES/DIAG4.png)
 
----
+### Observador de Estados
 
-## Ubicación de Polos
+- **Ecuación de estado**  
+  $x_{k+1} = A \cdot x_k + B \cdot u_k$
+
+- **Ecuación del observador**  
+  $\hat{x}_{k+1} = A \cdot \hat{x}_k + B \cdot u_k + L \cdot (y_k - \hat{y}_k)$
+
+Estimación basada en modelo → $A \cdot \hat{x}_k + B \cdot u_k$  
+Actualización con el error medido → $L \cdot (y_k - \hat{y}_k)$
+
+#### Representación del sistema extendido:
+
+$$
+A_{Ob} = A - L \cdot C
+$$
+
+$$
+B_{Ob} = \begin{bmatrix} B & L \end{bmatrix}
+$$
+
+$$
+C_{Ob} = I_{n \times n}
+$$
+
+$$
+D_{Ob} = \begin{bmatrix} 0_{n \times m} & 0_{n \times p} \end{bmatrix}
+$$
+
+Donde:
+
+- $n$: número de estados  
+- $m$: número de entradas  
+- $p$: número de salidas
+
+
+#### Estimación de perturbaciones y Ubicación de Polos
+
+- Se añade un estado adicional \( d \) para estimar las perturbaciones.
+- La matriz se extiende para incluir \( d \).
 
 Los coeficientes \( \lambda \) (lambdas) multiplican los estados con error. Esto da lugar a un **polinomio característico** cuyo objetivo es:
 
@@ -252,6 +283,191 @@ Los coeficientes \( \lambda \) (lambdas) multiplican los estados con error. Esto
 - Asegurar **estabilidad** (polos en el semiplano izquierdo).
 - Ubicar polos **más a la izquierda** para mayor velocidad.
 - Evitar componentes imaginarias para reducir oscilaciones.
+
+## Observador de Estados
+
+- **Ecuación de estado**
+
+  $x_{k+1}=A\cdot x_k + B\cdot u_k$
+
+- **Ecuación del Observador**
+
+  $\hat{x}_{k+1} = A\cdot \hat{x}_k + B\cdot u_k + L\cdot (y_k - \hat{y}_k)$
+
+  - **Estimación basada en modelo**
+  - **Actualización con el error medido**
+
+  Diagrama de bloques que representa el observador de estados y el proceso (con matrices $A$, $B$, $C$) y su implementación.
+
+---
+
+## ADRC
+
+### Estimación de Perturbaciones
+
+- **Para un sistema discreto con perturbación:**
+
+  $\begin{cases}
+  x_{k+1} = A\cdot x_k + B\cdot u_k + F\cdot d_k \\
+  y_k = C\cdot x_k
+  \end{cases}$
+
+- **Si la perturbación es constante** $d(k+1) = d(k)$ **podemos añadirla como variable de estado:**
+
+  $\begin{bmatrix}
+  x(k+1) \\
+  d(k+1)
+  \end{bmatrix}
+  = x_a(k+1) = 
+  \begin{bmatrix}
+  A & F \\
+  0 & I
+  \end{bmatrix}
+  x_a(k) +
+  \begin{bmatrix}
+  B \\
+  0
+  \end{bmatrix}
+  u(k)$
+
+  $y(k) = [C \quad 0] \cdot x_a(k)$
+
+- Ahora podemos diseñar un observador del estado, incluida la perturbación.
+- Estimada la perturbación, podemos compensar su efecto sobre la salida, mediante una pre-alimentación.
+
+---
+
+## ADRC (con diagrama de control)
+
+- Mismo sistema discreto con perturbación:
+
+  $\begin{cases}
+  x_{k+1} = A\cdot x_k + B\cdot u_k + F\cdot d_k \\
+  y_k = C\cdot x_k
+  \end{cases}$
+
+  $\begin{bmatrix}
+  x(k+1) \\
+  d(k+1)
+  \end{bmatrix}
+  = x_a(k+1) = 
+  \begin{bmatrix}
+  A & F \\
+  0 & I
+  \end{bmatrix}
+  x_a(k) +
+  \begin{bmatrix}
+  B \\
+  0
+  \end{bmatrix}
+  u(k)$
+
+  $y(k) = [C \quad 0] \cdot x_a(k)$
+
+---
+
+## Representación en Espacio de Estados
+
+$y^{(n)}(t) = u(t) + \xi(t)$
+
+$\begin{bmatrix}
+\dot{x}_1 \\
+\dot{x}_2 \\
+\dot{x}_3 \\
+\vdots \\
+\dot{x}_n
+\end{bmatrix}
+= A \cdot 
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+\vdots \\
+x_n
+\end{bmatrix}
++ B \cdot (u(t) + \xi(t))$
+
+$A = 
+\begin{bmatrix}
+0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & 1 \\
+0 & 0 & 0 & \cdots & 0
+\end{bmatrix}$
+
+$B = 
+\begin{bmatrix}
+0 \\
+0 \\
+\vdots \\
+0 \\
+1
+\end{bmatrix}$
+
+$C = [1 \quad 0 \quad 0 \quad \cdots \quad 0]$
+
+---
+
+## ADRC
+
+Se construye un observador de Luenberger donde $\hat{x}_\xi$ es el vector asociado a los coeficientes que determinan el polinomio de Hurwitz asociado a la dinámica del error de estimación $\tilde{e}_y$ definido como:
+
+$\tilde{e}_y = y - \hat{y}$
+
+$\dot{\hat{x}}_\xi = 
+A_\xi \cdot \hat{x}_\xi + 
+B_\xi \cdot u + 
+\lambda_\xi \cdot \tilde{e}_y(t)$
+
+Donde:
+
+$A_\xi = 
+\begin{bmatrix}
+0_{n+m \times 1} & I_{n+m-1\times n+m-1} \\
+0 & 0_{1\times n+m-1}
+\end{bmatrix}$
+
+$B_\xi = 
+\begin{bmatrix}
+0 \\
+0 \\
+\vdots \\
+1
+\end{bmatrix}$
+
+$C_\xi = [1 \quad 0 \quad \cdots \quad 0]$
+
+$\lambda_\xi =
+\begin{bmatrix}
+\lambda_{n+m-1} \\
+\lambda_{n+m-2} \\
+\vdots \\
+\lambda_0
+\end{bmatrix}$
+
+---
+
+## ADRC
+
+Al restar las ecuaciones anteriores se define la matriz asociada a la dinámica del error de estimación donde se obtiene la ecuación que describe la dinámica del error de estimación y su polinomio característico:
+
+$\tilde{e}_y^{(n+m)} + \lambda_{n+m-1}\tilde{e}_y^{(n+m-1)} + \lambda_{n+m-2}\tilde{e}_y^{(n+m-2)} + \cdots + \lambda_1\dot{\tilde{e}}_y + \lambda_0\tilde{e}_y = \xi^{(m)}(t)$
+
+$p(s) = s^{n+m} + \lambda_{n+m-1}s^{n+m-1} + \lambda_{n+m-2}s^{n+m-2} + \cdots + \lambda_2s^2 + \lambda_1s + \lambda_0$
+
+Los coeficientes $\lambda_\xi$ se escogen de tal forma que el polinomio característico relacionado con la dinámica del error de seguimiento tenga sus polos en el semiplano izquierdo del plano complejo (polinomio Hurwitz).
+
+---
+
+## ADRC
+
+Donde $\xi$ es la estimación de la perturbación generalizada, se estima con ayuda de un observador de estados, suponiendo que es posible modelarla por medio de un polinomio en función del tiempo:
+
+$\xi(t) = k_0 + k_1 t + k_2 t^2 + \cdots + k_m t^m + r(t)$
+
+Con $r(t)$ el residuo, si se asume el modelo para la estimación de la perturbación, como $\hat{\xi}^{(m)}(t)=0$ es posible plantear un observador para las derivadas de la salida, la perturbación y sus derivadas.
+
 
 ---
 
