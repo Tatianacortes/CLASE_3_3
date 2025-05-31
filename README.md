@@ -334,7 +334,7 @@ $$
 
 ### Ubicación de Polos
 
-Los coeficientes \( \lambda \) (lambdas) se aplican a los estados con error. Esto genera un **polinomio característico** que debe cumplir:
+Los coeficientes $\lambda$ se aplican a los estados con error. Esto genera un **polinomio característico** que debe cumplir:
 
 - Hacer que el error tienda a cero rápidamente.
 - Asegurar **estabilidad** (polos con parte real negativa).
@@ -350,6 +350,39 @@ y^{(n)}(t) = u(t) + \xi(t)
 $$
 
 $$
+\dot{x} = 
+\underbrace{
+\begin{bmatrix}
+0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 1 & \cdots & 0 \\
+0 & 0 & 0 & \ddots & 0 \\
+\vdots & \vdots & \vdots & \ddots & 1 \\
+0 & 0 & 0 & \cdots & 0
+\end{bmatrix}
+}_{A}
+x +
+\underbrace{
+\begin{bmatrix}
+0 \\
+0 \\
+\vdots \\
+0 \\
+1
+\end{bmatrix}
+}_{B}
+(u(t) + \xi(t))
+$$
+
+$$
+x = 
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+\vdots \\
+x_n
+\end{bmatrix}, \quad
+\dot{x} = 
 \begin{bmatrix}
 \dot{x}_1 \\
 \dot{x}_2 \\
@@ -357,16 +390,18 @@ $$
 \vdots \\
 \dot{x}_n
 \end{bmatrix}
-= A \cdot 
-\begin{bmatrix}
-x_1 \\
-x_2 \\
-x_3 \\
-\vdots \\
-x_n
-\end{bmatrix}
-+ B \cdot (u(t) + \xi(t))
 $$
+
+$$
+y = 
+\underbrace{
+\begin{bmatrix}
+1 & 0 & 0 & \cdots & 0
+\end{bmatrix}
+}_{C}
+x
+$$
+
 
 Matrices canónicas:
 
