@@ -393,7 +393,7 @@ $$
 $$
 
 - Donde \( r(t) \) es el residuo.
-- Si se asume que \( \hat{\xi}^{(m)}(t) = 0 \), entonces es posible construir un observador para las derivadas de la salida y la perturbación.
+- Si se asume que $\hat{\xi}^{(m)}(t) = 0 \$, entonces es posible construir un observador para las derivadas de la salida y la perturbación.
 
 ---
 
