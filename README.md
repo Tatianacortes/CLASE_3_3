@@ -1,10 +1,6 @@
 # CLASE 3 III CORTE
 
-¡Por supuesto! Aquí tienes el texto en formato de bloque de código Markdown listo para copiar y pegar en tu proyecto de GitHub:
-
 # **ADRC: Active Disturbance Rejection Control**
-
-## Introducción
 
 **ADRC** (Active Disturbance Rejection Control) es una técnica de control propuesta por **Zhiqiang Gao** como alternativa al clásico **PID**. Esta técnica busca resolver los problemas del control PID, tales como:
 
@@ -29,7 +25,7 @@ Esto permite **rechazar perturbaciones** sin necesidad de modelos matemáticos c
 - El **orden del sistema**.
 - La **ganancia crítica o nominal**.
 
-Por ejemplo, en un sistema no lineal, podemos modelar la parte lineal y dejar que el **ESO** se encargue de la no linealidad. Esto hace que ADRC sea **robusto** y adaptable a cambios en la planta.
+Por ejemplo, en un sistema no lineal, se puede modelar la parte lineal y dejar que el **ESO** se encargue de la no linealidad. Esto hace que ADRC sea **robusto** y adaptable a cambios en la planta.
 
 ---
 
@@ -53,7 +49,6 @@ Por ejemplo, en un sistema no lineal, podemos modelar la parte lineal y dejar qu
 
 La mayoría de los sistemas físicos (≈99%) son **no lineales**. Por ejemplo, en un tanque con área variable según la altura (paredes irregulares), para modelar el área respecto a la altura necesitaríamos una función matemática.
 
-Sin embargo, en ADRC, podemos considerar el término **1/A(h)** como una constante, dejando que el **ESO** estime la no linealidad y la rechace como perturbación.
 
 ---
 
@@ -116,17 +111,6 @@ Los coeficientes \( \lambda \) (lambdas) multiplican los estados con error. Esto
 
 ---
 
-## Resumen del Diseño
 
-El diseño del controlador ADRC/NADRC/LADRC se centra en:
-
-- **Rechazar perturbaciones**.
-- Ubicar los polos deseados para obtener la dinámica deseada:
-  - **Estabilidad**.
-  - **Rapidez** de respuesta.
-- La dinámica del **observador** debe ser **más rápida** que la del sistema, permitiendo rechazar perturbaciones de forma efectiva.
-
-
-¿Te gustaría que le agregara un diagrama o algún pseudocódigo para complementar? 🚀
 
 
