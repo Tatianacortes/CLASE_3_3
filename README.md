@@ -80,9 +80,55 @@ $$
 
 # **NADRC: Nonlinear ADRC**
 
-En **NADRC**, se introducen conceptos adicionales:
+## Sistema y Modelo en Espacio de Estados
 
-- \( a_0, a_1 \): Parámetros físicos del sistema.
+**Modelo de un sistema**
+
+$$
+\ddot{y} = -a_1 \dot{y} - a_0 y + bu
+$$
+
+**En espacio de estados**
+
+$$
+\begin{cases}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = -a_0 x_1 - a_1 x_2 + bu + w \\
+y = x_1
+\end{cases}
+$$
+
+**Suponiendo**
+
+$$
+f = -a_0 x_1 - a_1 x_2 + (b - b_0)u + w
+$$
+
+**Sustituyendo $f$ en espacio de estados:**
+
+$$
+\begin{cases}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = f + b_0u \\
+y = x_1
+\end{cases}
+$$
+
+**Como $f$ es desconocida, se asigna a un estado:**
+
+$$
+\begin{cases}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = x_3 + b_0u \\
+\dot{x}_3 = h \\
+y = x_1
+\end{cases}
+$$
+
+
+En **NADRC**, se introducen conceptos adicionales:  
+
+- $(a_{0}, a_{1})$: Parámetros físicos del sistema.
 - \( b \): Ganancia crítica o nominal.
 - \( w \): Perturbaciones.
 - \( f \): Función no lineal.
@@ -94,6 +140,26 @@ El **ESO** estima los estados al comparar la salida real del sistema con la sali
 - Las funciones en NADRC pueden ser complejas, ya que deben modelar la dinámica de las perturbaciones.  
 - **No es común** usar funciones complicadas a menos que el sistema tenga **no linealidades muy fuertes**.
 
+\[
+\begin{cases}
+\dot{z}_1 = z_2 - \beta_1 \gamma_1(e) \\
+\dot{z}_2 = z_3 + b_0 u - \beta_2 \gamma_2(e) \\
+\dot{z}_3 = -\beta_3 \gamma_3(e) \\
+e = z_1 - y
+\end{cases}
+\]
+
+\[
+u = \frac{u_0 - z_3}{b_0}
+\quad \text{Sistema controlado} \quad
+\begin{cases}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = u_0 \\
+y = x_1
+\end{cases}
+\quad \text{Libre de perturbaciones y comportamiento integrador}
+\]
+
 ---
 
 # **LADRC: Linear ADRC**
@@ -102,8 +168,8 @@ En **LADRC** (Linear ADRC):
 
 - El **observador** no requiere una función compleja, sino solo **constantes**.
 - Se deben calcular los coeficientes:
-  - \( K_1, K_2 \) (Controlador)
-  - \( L_1, L_2, L_3 \) (Observador)
+  - $(a_{0}, a_{1})$ (Controlador)
+  - $(a_{0}, a_{1})$ (Observador)
 
 Esto **reduce la complejidad** del sistema.
 
