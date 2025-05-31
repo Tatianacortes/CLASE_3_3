@@ -349,81 +349,7 @@ $$
 y^{(n)}(t) = u(t) + \xi(t)
 $$
 
-$$
-\dot{x} = 
-\underbrace{
-\begin{bmatrix}
-0 & 1 & 0 & \cdots & 0 \\
-0 & 0 & 1 & \cdots & 0 \\
-0 & 0 & 0 & \ddots & 0 \\
-\vdots & \vdots & \vdots & \ddots & 1 \\
-0 & 0 & 0 & \cdots & 0
-\end{bmatrix}
-}_{A}
-x +
-\underbrace{
-\begin{bmatrix}
-0 \\
-0 \\
-\vdots \\
-0 \\
-1
-\end{bmatrix}
-}_{B}
-(u(t) + \xi(t))
-$$
-
-$$
-x = 
-\begin{bmatrix}
-x_1 \\
-x_2 \\
-x_3 \\
-\vdots \\
-x_n
-\end{bmatrix}, \quad
-\dot{x} = 
-\begin{bmatrix}
-\dot{x}_1 \\
-\dot{x}_2 \\
-\dot{x}_3 \\
-\vdots \\
-\dot{x}_n
-\end{bmatrix}
-$$
-
-$$
-y = 
-\underbrace{
-\begin{bmatrix}
-1 & 0 & 0 & \cdots & 0
-\end{bmatrix}
-}_{C}
-x
-$$
-
-
-Matrices canónicas:
-
-$$
-A = 
-\begin{bmatrix}
-0 & 1 & 0 & \cdots & 0 \\
-0 & 0 & 1 & \cdots & 0 \\
-\vdots & \vdots & \vdots & \ddots & \vdots \\
-0 & 0 & 0 & \cdots & 1 \\
-0 & 0 & 0 & \cdots & 0
-\end{bmatrix}, \quad
-B = 
-\begin{bmatrix}
-0 \\
-0 \\
-\vdots \\
-0 \\
-1
-\end{bmatrix}, \quad
-C = [1 \quad 0 \quad 0 \quad \cdots \quad 0]
-$$
+![Figura de prueba](IMAGES/DIAG5.png)
 
 ---
 
@@ -437,43 +363,7 @@ $$
 
 #### Ecuación del Observador
 
-$$
-\dot{\hat{x}}_\xi = 
-A_\xi \cdot \hat{x}_\xi + 
-B_\xi \cdot u + 
-\lambda_\xi \cdot \tilde{e}_y(t)
-$$
-
-#### Matrices del Observador
-
-$$
-A_\xi = 
-\begin{bmatrix}
-0_{(n+m) \times 1} & I_{(n+m-1)\times(n+m-1)} \\
-0 & 0_{1 \times (n+m-1)}
-\end{bmatrix}
-$$
-
-$$
-B_\xi = 
-\begin{bmatrix}
-0 \\
-0 \\
-\vdots \\
-1
-\end{bmatrix}, \quad
-C_\xi = [1 \quad 0 \quad \cdots \quad 0]
-$$
-
-$$
-\lambda_\xi =
-\begin{bmatrix}
-\lambda_{n+m-1} \\
-\lambda_{n+m-2} \\
-\vdots \\
-\lambda_0
-\end{bmatrix}
-$$
+![Figura de prueba](IMAGES/DIAG6.png)
 
 ---
 
@@ -481,9 +371,8 @@ $$
 
 Al restar las ecuaciones, se define el polinomio característico de la dinámica del error:
 
-$$
-\tilde{e}_y^{(n+m)} + \lambda_{n+m-1}\tilde{e}_y^{(n+m-1)} + \cdots + \lambda_1\dot{\tilde{e}}_y + \lambda_0\tilde{e}_y = \xi^{(m)}(t)
-$$
+![Figura de prueba](IMAGES/DIAG7.png)
+
 
 #### Polinomio Característico
 
