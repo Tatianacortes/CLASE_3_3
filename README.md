@@ -271,21 +271,6 @@ Donde:
 - $m$: número de entradas  
 - $p$: número de salidas
 
-
-#### Estimación de perturbaciones y Ubicación de Polos
-
-- Se añade un estado adicional \( d \) para estimar las perturbaciones.
-- La matriz se extiende para incluir \( d \).
-
-Los coeficientes \( \lambda \) (lambdas) multiplican los estados con error. Esto da lugar a un **polinomio característico** cuyo objetivo es:
-
-- Hacer que el error tienda a cero rápidamente.
-- Asegurar **estabilidad** (polos en el semiplano izquierdo).
-- Ubicar polos **más a la izquierda** para mayor velocidad.
-- Evitar componentes imaginarias para reducir oscilaciones.
-
-## Observador de Estados
-
 - **Ecuación de estado**
 
   $x_{k+1}=A\cdot x_k + B\cdot u_k$
@@ -297,80 +282,79 @@ Los coeficientes \( \lambda \) (lambdas) multiplican los estados con error. Esto
   - **Estimación basada en modelo**
   - **Actualización con el error medido**
 
-  Diagrama de bloques que representa el observador de estados y el proceso (con matrices $A$, $B$, $C$) y su implementación.
+
+# ADRC - Control Activo de Perturbaciones
 
 ---
 
-## ADRC
+## 1. Estimación de Perturbaciones
 
-### Estimación de Perturbaciones
+- Se añade un estado adicional \( d \) para estimar las perturbaciones.
+- La matriz del sistema se extiende para incluir \( d \).
 
-- **Para un sistema discreto con perturbación:**
+### Sistema Discreto con Perturbación
 
-  $\begin{cases}
-  x_{k+1} = A\cdot x_k + B\cdot u_k + F\cdot d_k \\
-  y_k = C\cdot x_k
-  \end{cases}$
+$$
+\begin{cases}
+x_{k+1} = A \cdot x_k + B \cdot u_k + F \cdot d_k \\
+y_k = C \cdot x_k
+\end{cases}
+$$
 
-- **Si la perturbación es constante** $d(k+1) = d(k)$ **podemos añadirla como variable de estado:**
+### Si la perturbación es constante:
 
-  $\begin{bmatrix}
-  x(k+1) \\
-  d(k+1)
-  \end{bmatrix}
-  = x_a(k+1) = 
-  \begin{bmatrix}
-  A & F \\
-  0 & I
-  \end{bmatrix}
-  x_a(k) +
-  \begin{bmatrix}
-  B \\
-  0
-  \end{bmatrix}
-  u(k)$
+$$
+d(k+1) = d(k)
+$$
 
-  $y(k) = [C \quad 0] \cdot x_a(k)$
+Entonces se puede redefinir el sistema extendido como:
 
-- Ahora podemos diseñar un observador del estado, incluida la perturbación.
-- Estimada la perturbación, podemos compensar su efecto sobre la salida, mediante una pre-alimentación.
+$$
+\begin{bmatrix}
+x(k+1) \\
+d(k+1)
+\end{bmatrix}
+= x_a(k+1) = 
+\begin{bmatrix}
+A & F \\
+0 & I
+\end{bmatrix}
+x_a(k) +
+\begin{bmatrix}
+B \\
+0
+\end{bmatrix}
+u(k)
+$$
 
----
+$$
+y(k) = [C \quad 0] \cdot x_a(k)
+$$
 
-## ADRC (con diagrama de control)
-
-- Mismo sistema discreto con perturbación:
-
-  $\begin{cases}
-  x_{k+1} = A\cdot x_k + B\cdot u_k + F\cdot d_k \\
-  y_k = C\cdot x_k
-  \end{cases}$
-
-  $\begin{bmatrix}
-  x(k+1) \\
-  d(k+1)
-  \end{bmatrix}
-  = x_a(k+1) = 
-  \begin{bmatrix}
-  A & F \\
-  0 & I
-  \end{bmatrix}
-  x_a(k) +
-  \begin{bmatrix}
-  B \\
-  0
-  \end{bmatrix}
-  u(k)$
-
-  $y(k) = [C \quad 0] \cdot x_a(k)$
+- Ahora es posible diseñar un **observador de estados** que también estime la perturbación.
+- Esta estimación permite aplicar una **prealimentación** para compensar la perturbación.
 
 ---
 
-## Representación en Espacio de Estados
+## 2. Ubicación de Polos
 
-$y^{(n)}(t) = u(t) + \xi(t)$
+Los coeficientes \( \lambda \) (lambdas) se aplican a los estados con error. Esto genera un **polinomio característico** que debe cumplir:
 
-$\begin{bmatrix}
+- Hacer que el error tienda a cero rápidamente.
+- Asegurar **estabilidad** (polos con parte real negativa).
+- Ubicar polos más a la izquierda para **mayor rapidez**.
+- Evitar partes imaginarias grandes para **reducir oscilaciones**.
+
+---
+
+## 3. Representación en Espacio de Estados
+
+$$
+y^{(n)}(t) = u(t) + \xi(t)
+$$
+
+$$
+\begin{bmatrix}
 \dot{x}_1 \\
 \dot{x}_2 \\
 \dot{x}_3 \\
@@ -385,88 +369,114 @@ x_3 \\
 \vdots \\
 x_n
 \end{bmatrix}
-+ B \cdot (u(t) + \xi(t))$
++ B \cdot (u(t) + \xi(t))
+$$
 
-$A = 
+Matrices canónicas:
+
+$$
+A = 
 \begin{bmatrix}
 0 & 1 & 0 & \cdots & 0 \\
 0 & 0 & 1 & \cdots & 0 \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & 0 & \cdots & 1 \\
 0 & 0 & 0 & \cdots & 0
-\end{bmatrix}$
-
-$B = 
+\end{bmatrix}, \quad
+B = 
 \begin{bmatrix}
 0 \\
 0 \\
 \vdots \\
 0 \\
 1
-\end{bmatrix}$
-
-$C = [1 \quad 0 \quad 0 \quad \cdots \quad 0]$
+\end{bmatrix}, \quad
+C = [1 \quad 0 \quad 0 \quad \cdots \quad 0]
+$$
 
 ---
 
-## ADRC
+## 4. Observador de Luenberger para ADRC
 
-Se construye un observador de Luenberger donde $\hat{x}_\xi$ es el vector asociado a los coeficientes que determinan el polinomio de Hurwitz asociado a la dinámica del error de estimación $\tilde{e}_y$ definido como:
+### Estimación del Error
 
-$\tilde{e}_y = y - \hat{y}$
+$$
+\tilde{e}_y = y - \hat{y}
+$$
 
-$\dot{\hat{x}}_\xi = 
+### Ecuación del Observador
+
+$$
+\dot{\hat{x}}_\xi = 
 A_\xi \cdot \hat{x}_\xi + 
 B_\xi \cdot u + 
-\lambda_\xi \cdot \tilde{e}_y(t)$
+\lambda_\xi \cdot \tilde{e}_y(t)
+$$
 
-Donde:
+### Matrices del Observador
 
-$A_\xi = 
+$$
+A_\xi = 
 \begin{bmatrix}
-0_{n+m \times 1} & I_{n+m-1\times n+m-1} \\
-0 & 0_{1\times n+m-1}
-\end{bmatrix}$
+0_{(n+m) \times 1} & I_{(n+m-1)\times(n+m-1)} \\
+0 & 0_{1 \times (n+m-1)}
+\end{bmatrix}
+$$
 
-$B_\xi = 
+$$
+B_\xi = 
 \begin{bmatrix}
 0 \\
 0 \\
 \vdots \\
 1
-\end{bmatrix}$
+\end{bmatrix}, \quad
+C_\xi = [1 \quad 0 \quad \cdots \quad 0]
+$$
 
-$C_\xi = [1 \quad 0 \quad \cdots \quad 0]$
-
-$\lambda_\xi =
+$$
+\lambda_\xi =
 \begin{bmatrix}
 \lambda_{n+m-1} \\
 \lambda_{n+m-2} \\
 \vdots \\
 \lambda_0
-\end{bmatrix}$
+\end{bmatrix}
+$$
 
 ---
 
-## ADRC
+## 5. Dinámica del Error de Estimación
 
-Al restar las ecuaciones anteriores se define la matriz asociada a la dinámica del error de estimación donde se obtiene la ecuación que describe la dinámica del error de estimación y su polinomio característico:
+Al restar las ecuaciones, se define el polinomio característico de la dinámica del error:
 
-$\tilde{e}_y^{(n+m)} + \lambda_{n+m-1}\tilde{e}_y^{(n+m-1)} + \lambda_{n+m-2}\tilde{e}_y^{(n+m-2)} + \cdots + \lambda_1\dot{\tilde{e}}_y + \lambda_0\tilde{e}_y = \xi^{(m)}(t)$
+$$
+\tilde{e}_y^{(n+m)} + \lambda_{n+m-1}\tilde{e}_y^{(n+m-1)} + \cdots + \lambda_1\dot{\tilde{e}}_y + \lambda_0\tilde{e}_y = \xi^{(m)}(t)
+$$
 
-$p(s) = s^{n+m} + \lambda_{n+m-1}s^{n+m-1} + \lambda_{n+m-2}s^{n+m-2} + \cdots + \lambda_2s^2 + \lambda_1s + \lambda_0$
+### Polinomio Característico
 
-Los coeficientes $\lambda_\xi$ se escogen de tal forma que el polinomio característico relacionado con la dinámica del error de seguimiento tenga sus polos en el semiplano izquierdo del plano complejo (polinomio Hurwitz).
+$$
+p(s) = s^{n+m} + \lambda_{n+m-1}s^{n+m-1} + \cdots + \lambda_1 s + \lambda_0
+$$
+
+- Se seleccionan los \( \lambda_i \) para que todos los polos estén en el semiplano izquierdo → **Polinomio de Hurwitz**.
 
 ---
 
-## ADRC
+## 6. Estimación de la Perturbación Generalizada
 
-Donde $\xi$ es la estimación de la perturbación generalizada, se estima con ayuda de un observador de estados, suponiendo que es posible modelarla por medio de un polinomio en función del tiempo:
+Se asume que la perturbación puede modelarse como un polinomio en el tiempo:
 
-$\xi(t) = k_0 + k_1 t + k_2 t^2 + \cdots + k_m t^m + r(t)$
+$$
+\xi(t) = k_0 + k_1 t + k_2 t^2 + \cdots + k_m t^m + r(t)
+$$
 
-Con $r(t)$ el residuo, si se asume el modelo para la estimación de la perturbación, como $\hat{\xi}^{(m)}(t)=0$ es posible plantear un observador para las derivadas de la salida, la perturbación y sus derivadas.
+- Donde \( r(t) \) es el residuo.
+- Si se asume que \( \hat{\xi}^{(m)}(t) = 0 \), entonces es posible construir un observador para las derivadas de la salida y la perturbación.
+
+---
+
 
 
 ---
