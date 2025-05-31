@@ -140,25 +140,30 @@ El **ESO** estima los estados al comparar la salida real del sistema con la sali
 - Las funciones en NADRC pueden ser complejas, ya que deben modelar la dinámica de las perturbaciones.  
 - **No es común** usar funciones complicadas a menos que el sistema tenga **no linealidades muy fuertes**.
 
-\[
+$$
 \begin{cases}
 \dot{z}_1 = z_2 - \beta_1 \gamma_1(e) \\
 \dot{z}_2 = z_3 + b_0 u - \beta_2 \gamma_2(e) \\
 \dot{z}_3 = -\beta_3 \gamma_3(e) \\
 e = z_1 - y
 \end{cases}
-\]
+$$
 
-\[
+$$
 u = \frac{u_0 - z_3}{b_0}
-\quad \text{Sistema controlado} \quad
+$$
+
+**Sistema controlado:**
+
+$$
 \begin{cases}
 \dot{x}_1 = x_2 \\
 \dot{x}_2 = u_0 \\
 y = x_1
 \end{cases}
 \quad \text{Libre de perturbaciones y comportamiento integrador}
-\]
+$$
+
 
 ---
 
@@ -168,8 +173,8 @@ En **LADRC** (Linear ADRC):
 
 - El **observador** no requiere una función compleja, sino solo **constantes**.
 - Se deben calcular los coeficientes:
-  - $(a_{0}, a_{1})$ (Controlador)
-  - $(a_{0}, a_{1})$ (Observador)
+  - $(K_{1}, K_{2})$ (Controlador)
+  - $(L_{1}, L_{2}, L_{3})$ (Observador)
 
 Esto **reduce la complejidad** del sistema.
 
@@ -189,6 +194,53 @@ Esto **reduce la complejidad** del sistema.
 
 - Se añade un estado adicional \( d \) para estimar las perturbaciones.
 - La matriz se extiende para incluir \( d \).
+
+$$
+u_0 = k_1 \, \text{fal}(r_1 - z_1, \alpha_1, \delta) + k_2 \, \text{fal}(r_1 - z_2, \alpha_2, \delta)
+$$
+
+$$
+\text{fal}(\tilde{e}, \alpha_i, \delta) =
+\begin{cases}
+\frac{\tilde{e}}{\delta^{1 - \alpha_i}}, & \text{si } |\tilde{e}| \leq \delta \\
+|\tilde{e}|^{\alpha_i} \, \text{sign}(\tilde{e}), & \text{si } |\tilde{e}| > \delta
+\end{cases}
+$$
+
+---
+
+### Observador de estados extendido lineal
+
+$$
+\begin{cases}
+\dot{z}_1 = z_2 + L_1 e \\
+\dot{z}_2 = z_3 + b_0 u + L_2 e \\
+\dot{z}_3 = L_3 e \\
+e = y - z_1
+\end{cases}
+\quad
+\begin{cases}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = x_3 + b_0 u \\
+\dot{x}_3 = h \\
+y = x_1
+\end{cases}
+$$
+
+**La acción de control sería:**
+
+$$
+u_0 = k_1 (\tilde{r} - z_1) - k_2 z_2
+$$
+
+---
+
+**Donde** $\xi(t)$ **se define como la perturbación generalizada, de tipo aditivo:**
+
+$$
+y^{(n)} = \kappa(x) \, u(t) + \xi(t)
+$$
+
 
 ---
 
