@@ -43,6 +43,8 @@ Por ejemplo, en un sistema no lineal, se puede modelar la parte lineal y dejar q
    - Estima estados, perturbaciones, errores y no linealidades.
 3. **Controlador proporcional por retroalimentación de estados**.
 
+![Figura de prueba](IMAGES/DIAG1.png)
+
 ---
 
 ## Ejemplo: Sistema No Lineal
