@@ -49,8 +49,32 @@ Por ejemplo, en un sistema no lineal, se puede modelar la parte lineal y dejar q
 
 ## Ejemplo: Sistema No Lineal
 
-La mayoría de los sistemas físicos (≈99%) son **no lineales**. Por ejemplo, en un tanque con área variable según la altura (paredes irregulares), para modelar el área respecto a la altura necesitaríamos una función matemática.
+El 99% de los sistemas físicos son no lineales. Sin embargo, estos sistemas se pueden descomponer en una parte lineal y una parte no lineal. A continuación, se presenta el caso de un tanque cuya área de sección transversal varía en función de la altura, debido a sus paredes irregulares. Para determinar cómo varía el área respecto a la altura, es necesario conocer la forma del tanque y establecer una función matemática que describa esta relación.
 
+En el contexto de ADRC, es posible considerar \(1/A(h)\) como una constante, permitiendo así rechazar la no linealidad. Esta no linealidad es estimada y compensada por el **observador de estado extendido (ESO)**.
+
+![Figura de prueba](IMAGES/DIAG2.png)  
+![Figura de prueba](IMAGES/DIAG3.png)
+
+**Ecuaciones del sistema**
+
+$$
+\frac{d}{dt} \left( \int_0^h A(h)dh \right) = u - a\sqrt{2gh}
+$$
+
+$$
+A(h)\dot{h} = u - a\sqrt{2gh}
+$$
+
+$$
+\dot{h} = \frac{1}{A(h)}u - \frac{a\sqrt{2gh}}{A(h)}
+$$
+
+**Modelo lineal**
+
+$$
+\dot{h} = Ku + h
+$$
 
 ---
 
